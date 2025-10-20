@@ -1,0 +1,18 @@
+{
+	"name": "@webtools/init",
+	"exports": "./src/mod.ts",
+	"version": "0.1.0",
+	"license": "MIT",
+
+	"lock": false,
+	"imports": {
+		"@std/path": "jsr:@std/path@^1.1.2",
+		"@std/fs": "jsr:@std/fs@^1.0.19"
+	},
+
+	"fmt": {
+		"indentWidth": 4,
+		"lineWidth": 120,
+		"useTabs": true
+	}
+}
