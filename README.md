@@ -38,8 +38,8 @@ deno run -Ar jsr:@webtools/init
 
 Once your project is created, two applications will be available (if you enabled the API):
 
-* **Frontend** (in `/front`)
-* **Backend** (in `/back`)
+- **Frontend** (in `/front`)
+- **Backend** (in `/back`)
 
 You must start them **separately**, each with its own command.
 
@@ -79,7 +79,8 @@ deno task build
 
 ## ⚙️ Environment Configuration
 
-If you activate the **database** option during project creation, go to the `/back` directory and configure your environment files with the following variables:
+If you activate the **database** option during project creation, go to the `/back` directory and configure your
+environment files with the following variables:
 
 ```
 DATABASE_HOST=
@@ -99,9 +100,9 @@ MAILER_NAME=
 
 When the database option is enabled, the generated code automatically includes:
 
-* A minimal **user model**
-* An **authentication middleware**
-* An **endpoint** to fetch user data
+- A minimal **user model**
+- An **authentication middleware**
+- An **endpoint** to fetch user data
 
 This provides a ready-to-use foundation for managing user accounts securely.
 
