@@ -45,10 +45,12 @@ class Mailer {
 	}
 }
 
+const MAILER_PORT = Number(Deno.env.get("MAILER_PORT")!);
+
 export const mailer = new Mailer({
 	host: Deno.env.get("MAILER_HOST")!,
-	port: Number(Deno.env.get("MAILER_PORT")!),
-	secure: true,
+	port: MAILER_PORT,
+	secure: MAILER_PORT == 465,
 	auth: {
 		user: Deno.env.get("MAILER_USER")!,
 		pass: Deno.env.get("MAILER_PASS")!,

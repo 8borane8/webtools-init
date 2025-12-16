@@ -93,6 +93,7 @@ If you enable the **mailer** service, also configure:
 
 ```
 MAILER_HOST=
+MAILER_PORT=
 MAILER_USER=
 MAILER_PASS=
 MAILER_NAME=

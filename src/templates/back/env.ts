@@ -12,7 +12,7 @@ export function env(backPath: string, project: Project) {
 			`\nAPP_URL=http://localhost:${project.app.port}`,
 
 			project.api!.database && "\nDATABASE_HOST=\nDATABASE_USER=\nDATABASE_PASS=\nDATABASE_NAME=",
-			project.api!.mailer && "\nMAILER_HOST=\nMAILER_USER=\nMAILER_PASS=\nMAILER_NAME=",
+			project.api!.mailer && "\nMAILER_HOST=\nMAILER_PORT=\nMAILER_USER=\nMAILER_PASS=\nMAILER_NAME=",
 		].filter(Boolean).join("\n"),
 	);
 
@@ -26,7 +26,7 @@ export function env(backPath: string, project: Project) {
 			`\nAPP_URL=${project.app.url}`,
 
 			project.api!.database && "\nDATABASE_HOST=\nDATABASE_USER=\nDATABASE_PASS=\nDATABASE_NAME=",
-			project.api!.mailer && "\nMAILER_HOST=\nMAILER_USER=\nMAILER_PASS=\nMAILER_NAME=",
+			project.api!.mailer && "\nMAILER_HOST=\nMAILER_PORT=\nMAILER_USER=\nMAILER_PASS=\nMAILER_NAME=",
 		].filter(Boolean).join("\n"),
 	);
 }
