@@ -1,4 +1,4 @@
-import type { Project } from "../../../interfaces/Project.ts";
+import type { Project } from "../../../interfaces/project.ts";
 import * as utils from "../../../utils.ts";
 import * as path from "@std/path";
 
@@ -38,7 +38,7 @@ export default {
 		"/scripts/app.ts",
 	],
 
-	head: <></>,
+	head: null,
 	body: (
 		<>
 			<div id="app"></div>

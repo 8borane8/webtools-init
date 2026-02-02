@@ -1,4 +1,4 @@
-import type { Project } from "../../../interfaces/Project.ts";
+import type { Project } from "../../../interfaces/project.ts";
 import * as utils from "../../../utils.ts";
 import * as path from "@std/path";
 import { templates } from "./templates.ts";
@@ -9,7 +9,7 @@ export function src(frontPath: string, project: Project) {
 	const srcPath = path.join(frontPath, "src");
 	utils.ensureDir(srcPath);
 
-	const env = project.api ? `\n    env: { API_URL: Deno.env.get("API_URL") },` : "";
+	const env = project.api ? `\n    env: { API_URL: Deno.env.get("API_URL")! },` : "";
 
 	Deno.writeTextFileSync(
 		path.join(srcPath, "index.ts"),
@@ -17,6 +17,8 @@ export function src(frontPath: string, project: Project) {
 
 const slick = new Slick(import.meta.dirname!, {${env}
     port: Number(Deno.env.get("APP_PORT")!),
+    lang: "en",
+    r404: "/",
     client: true,
 });
 

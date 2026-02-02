@@ -1,4 +1,4 @@
-import type { Project } from "../../../interfaces/Project.ts";
+import type { Project } from "../../../interfaces/project.ts";
 import * as utils from "../../../utils.ts";
 import * as path from "@std/path";
 
@@ -8,9 +8,9 @@ export function middlewares(srcPath: string, project: Project) {
 
 	Deno.writeTextFileSync(
 		path.join(middlewaresPath, "cors.ts"),
-		`import * as expressapi from "@webtools/expressapi";
+		`import { RequestListener } from "@webtools/expressapi";
 
-export const cors: expressapi.RequestListener = (_req, res) => {
+export const cors: RequestListener = (_req, res) => {
 	res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
 	res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Fingerprint");
 
@@ -21,11 +21,15 @@ export const cors: expressapi.RequestListener = (_req, res) => {
 	if (project.api!.database) {
 		Deno.writeTextFileSync(
 			path.join(middlewaresPath, "user.ts"),
-			`import * as expressapi from "@webtools/expressapi";
-import * as services from "../services/index.ts";
-import * as models from "../models/index.ts";
+			`import { RequestListener } from "@webtools/expressapi";
+import * as services from "#/services/index.ts";
+import * as models from "#/models/index.ts";
 
-export const user: expressapi.RequestListener = async (req, res) => {
+export interface UserData {
+	user: models.User;
+}
+
+export const user: RequestListener<Partial<UserData>> = async (req, res) => {
 	const token = req.headers.get("authorization")?.split(" ")[1] || "";
 	const payload = await services.jsonToken.verify(token);
 

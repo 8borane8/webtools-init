@@ -1,4 +1,4 @@
-import type { Project } from "../../../interfaces/Project.ts";
+import type { Project } from "../../../interfaces/project.ts";
 import * as utils from "../../../utils.ts";
 import * as path from "@std/path";
 
@@ -8,7 +8,7 @@ export function pages(srcPath: string, project: Project) {
 
 	const f = project.api?.database ? `(req) => ` : "";
 	const p = project.api?.database
-		? `\n			{req.data.user && <p>Logged has {req.data.user.username}</p>}`
+		? `\n			{req.data.user && <p>Logged in as {req.data.user.username}</p>}`
 		: "";
 
 	Deno.writeTextFileSync(
@@ -26,7 +26,7 @@ export default {
 	],
 	scripts: [],
 
-	head: <></>,
+	head: null,
 	body: ${f}(
 		<>
 			<h1>Welcome to your Webtools App</h1>${p}

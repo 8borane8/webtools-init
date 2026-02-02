@@ -12,6 +12,6 @@ export function confirmPrompt(msg: string): boolean {
 	return prompt(`${msg} [Y/n]:`)?.toLowerCase() != "n";
 }
 
-export function ensureDir(p: string) {
+export function ensureDir(p: string): void {
 	if (!fs.existsSync(p)) Deno.mkdirSync(p, { recursive: true });
 }

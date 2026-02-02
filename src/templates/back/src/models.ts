@@ -1,4 +1,4 @@
-import type { Project } from "../../../interfaces/Project.ts";
+import type { Project } from "../../../interfaces/project.ts";
 import * as utils from "../../../utils.ts";
 import * as path from "@std/path";
 
@@ -9,7 +9,7 @@ export function models(srcPath: string, project: Project) {
 	utils.ensureDir(modelsPath);
 
 	Deno.writeTextFileSync(
-		path.join(modelsPath, "User.ts"),
+		path.join(modelsPath, "user.ts"),
 		`import * as decorators from "@sequelize/core/decorators-legacy";
 import * as sequelize from "@sequelize/core";
 
@@ -44,6 +44,6 @@ export class User extends sequelize.Model {
 
 	Deno.writeTextFileSync(
 		path.join(modelsPath, "index.ts"),
-		`export * from "./User.ts";`,
+		`export * from "./user.ts";`,
 	);
 }

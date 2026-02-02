@@ -9,9 +9,9 @@ export function deno(frontPath: string) {
 		},
 
 		imports: {
-			"@webtools/slick-server": "jsr:@webtools/slick-server@^0.3.9",
-			"@webtools/slick-client": "jsr:@webtools/slick-client@^0.1.9",
-			"@webtools/expressapi": "jsr:@webtools/expressapi@^0.4.7",
+			"@webtools/slick-server": "jsr:@webtools/slick-server@^0.4.12",
+			"@webtools/slick-client": "jsr:@webtools/slick-client@^0.2.11",
+			"@webtools/expressapi": "jsr:@webtools/expressapi@^0.6.7",
 
 			preact: "npm:preact@^10.23.2",
 		},

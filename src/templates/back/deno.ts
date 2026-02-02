@@ -1,4 +1,4 @@
-import type { Project } from "../../interfaces/Project.ts";
+import type { Project } from "../../interfaces/project.ts";
 import * as path from "@std/path";
 
 export function deno(backPath: string, project: Project) {
@@ -10,9 +10,11 @@ export function deno(backPath: string, project: Project) {
 		},
 
 		imports: {
-			"@webtools/expressapi": "jsr:@webtools/expressapi@^0.4.7",
-			"@std/path": "jsr:@std/path@^1.0.4",
-			"@std/fs": "jsr:@std/fs@^1.0.3",
+			"#/": "./src/",
+
+			"@webtools/expressapi": "jsr:@webtools/expressapi@^0.6.7",
+			"@std/path": "jsr:@std/path@^1.0.8",
+			"@std/fs": "jsr:@std/fs@^1.0.14",
 		} as Record<string, string>,
 
 		fmt: {

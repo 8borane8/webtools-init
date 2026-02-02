@@ -1,4 +1,4 @@
-import type { Project } from "./interfaces/Project.ts";
+import type { Project } from "./interfaces/project.ts";
 import * as front from "./templates/front/index.ts";
 import * as back from "./templates/back/index.ts";
 import * as utils from "./utils.ts";
@@ -6,7 +6,7 @@ import * as path from "@std/path";
 import * as fs from "@std/fs";
 
 const project: Project = {
-	name: "webtools-app",
+	name: "webtools-new-project",
 	vscode: true,
 
 	app: {
@@ -28,13 +28,13 @@ console.log("Let's set up your new application.");
 
 project.name = utils.promptString("\n[PROJECT] Name", project.name);
 
-if (!/^[a-z0-9-_]+$/i.test(project.name)) {
-	console.error("Invalid project name!");
+if (!/^[a-z0-9-_.]+$/i.test(project.name)) {
+	console.error("The project name can only contain letters, numbers, hyphens, underscores and dots.");
 	Deno.exit(1);
 }
 
 if (fs.existsSync(project.name)) {
-	console.error("This project already exist!");
+	console.error("The project name is already taken.");
 	Deno.exit(1);
 }
 
