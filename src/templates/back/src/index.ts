@@ -37,13 +37,12 @@ await database.sync({ alter: true });
 
 	Deno.writeTextFileSync(
 		path.join(srcPath, "index.ts"),
-		`${database}import * as middlewares from "#/middlewares/index.ts";
-import * as expressapi from "@webtools/expressapi";
+		`${database}import * as expressapi from "@webtools/expressapi";
 import * as path from "@std/path";
 import * as fs from "@std/fs";
 
 export const httpServer = new expressapi.HttpServer();
-httpServer.use(middlewares.cors);
+httpServer.cors({ allowOrigin: Deno.env.get("APP_URL")! });
 
 for (const walkEntry of fs.walkSync(\`\${Deno.cwd()}/src/routes\`, { includeDirs: false })) {
 	const dynamicImport = await import(path.toFileUrl(walkEntry.path).toString());

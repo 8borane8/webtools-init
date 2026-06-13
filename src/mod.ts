@@ -1,6 +1,7 @@
 import type { Project } from "./interfaces/project.ts";
 import * as front from "./templates/front/index.ts";
 import * as back from "./templates/back/index.ts";
+import * as root from "./templates/root/index.ts";
 import * as utils from "./utils.ts";
 import * as path from "@std/path";
 import * as fs from "@std/fs";
@@ -66,16 +67,18 @@ if (project.vscode) {
 const frontPath = project.api ? path.join(project.name, "front") : project.name;
 if (project.api) utils.ensureDir(frontPath);
 
-front.deno(frontPath);
+front.deno(frontPath, !!project.api);
 front.env(frontPath, project);
 
 front.src(frontPath, project);
 
 if (project.api) {
+	root.deno(project.name);
+
 	const backPath = path.join(project.name, "back");
 	utils.ensureDir(backPath);
 
-	back.deno(backPath, project);
+	back.deno(backPath, project, true);
 	back.env(backPath, project);
 
 	back.src(backPath, project);

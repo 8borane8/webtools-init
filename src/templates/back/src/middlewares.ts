@@ -3,25 +3,13 @@ import * as utils from "../../../utils.ts";
 import * as path from "@std/path";
 
 export function middlewares(srcPath: string, project: Project) {
+	if (!project.api!.database) return;
+
 	const middlewaresPath = path.join(srcPath, "middlewares");
 	utils.ensureDir(middlewaresPath);
-
 	Deno.writeTextFileSync(
-		path.join(middlewaresPath, "cors.ts"),
-		`import { RequestListener } from "@webtools/expressapi";
-
-export const cors: RequestListener = (_req, res) => {
-	res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
-	res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Fingerprint");
-
-	res.setHeader("Access-Control-Allow-Origin", Deno.env.get("APP_URL")!);
-};`,
-	);
-
-	if (project.api!.database) {
-		Deno.writeTextFileSync(
-			path.join(middlewaresPath, "user.ts"),
-			`import { RequestListener } from "@webtools/expressapi";
+		path.join(middlewaresPath, "user.ts"),
+		`import type { RequestListener } from "@webtools/expressapi";
 import * as services from "#/services/index.ts";
 import * as models from "#/models/index.ts";
 
@@ -50,14 +38,10 @@ export const user: RequestListener<Partial<UserData>> = async (req, res) => {
 
 	req.data.user = user;
 };`,
-		);
-	}
+	);
 
 	Deno.writeTextFileSync(
 		path.join(middlewaresPath, "index.ts"),
-		[
-			`export * from "./cors.ts";`,
-			project.api!.database && `export * from "./user.ts";`,
-		].filter(Boolean).join("\n"),
+		`export * from "./user.ts";`,
 	);
 }

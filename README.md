@@ -20,67 +20,158 @@
 
 ## ✨ Features
 
-- Create a ready-to-use full-stack web app (front + back)
-- Frontend: Slick (SSR + SPA)
-- Backend: ExpressAPI
-- Authentication: Built-in JsonToken auth service
-- Database: Seequelize ORM integration
-- Pre-configured project structure (client, server, shared)
-- Works instantly via JSR — no installation needed
+- **Interactive CLI** — guided setup through a series of prompts (project name, ports, URLs, optional services)
+- **Full-stack or frontend-only** — generate a complete monorepo or a standalone Slick app
+- **Frontend: Slick** — SSR with Preact, client hydration, and interactive islands (`@preact/signals`)
+- **Backend: ExpressAPI** — HTTP server with auto-discovered routes, CORS, and JSON responses
+- **Optional database** — Sequelize ORM with MariaDB, user model, JWT auth middleware, and `/user` endpoint
+- **Optional mailer** — Nodemailer service ready to send emails
+- **Deno workspace** — monorepo layout with shared formatting when the API is enabled
+- **VS Code ready** — optional `.vscode/settings.json` with Deno enabled
+- **Zero install** — runs instantly from JSR, no global setup required
 
 ## 📦 Installation
+
+No installation needed. Run the CLI directly from JSR:
 
 ```bash
 deno run -Ar jsr:@webtools/init
 ```
 
+## 🧭 Interactive setup
+
+The CLI walks you through the following steps:
+
+| Step         | Prompt                                       | Default                |
+| ------------ | -------------------------------------------- | ---------------------- |
+| Project name | Letters, numbers, hyphens, underscores, dots | `webtools-new-project` |
+| VS Code      | Enable Deno in `.vscode/settings.json`       | Yes                    |
+| App port     | Frontend server port                         | `5000`                 |
+| App URL      | Production frontend URL                      | _(empty)_              |
+| Use API      | Enable a backend alongside the frontend      | Yes                    |
+| API port     | Backend server port                          | `5050`                 |
+| API URL      | Production API URL                           | _(empty)_              |
+| Database     | Sequelize + MariaDB integration              | Yes                    |
+| Mailer       | Nodemailer email service                     | Yes                    |
+
+If you decline the API, only the frontend is generated at the project root. If you accept it, a Deno workspace monorepo
+is created with `front/` and `back/` directories.
+
+## 📁 Generated project structure
+
+### With API (monorepo)
+
+```
+my-project/
+├── deno.json          # Deno workspace (front + back)
+├── front/
+│   ├── deno.json
+│   ├── .dev.env
+│   ├── .env
+│   └── src/
+│       ├── index.ts       # Slick server entry point
+│       ├── pages/         # Route pages (SSR)
+│       ├── templates/     # Layout templates
+│       ├── islands/       # Interactive Preact components
+│       └── static/        # CSS, scripts, assets
+└── back/
+    ├── deno.json
+    ├── .dev.env
+    ├── .env
+    └── src/
+        ├── index.ts       # ExpressAPI server entry point
+        ├── routes/        # Auto-loaded routers
+        ├── middlewares/   # Request middlewares (if database)
+        ├── models/        # Sequelize models (if database)
+        └── services/      # JsonToken, mailer (if enabled)
+```
+
+### Without API (frontend only)
+
+```
+my-project/
+├── deno.json
+├── .dev.env
+├── .env
+└── src/
+    ├── index.ts
+    ├── pages/
+    ├── templates/
+    ├── islands/
+    └── static/
+```
+
 ## 🚀 Usage
 
-Once your project is created, two applications will be available (if you enabled the API):
+Each application runs independently with its own `deno task` commands.
 
-- **Frontend** (in `/front`)
-- **Backend** (in `/back`)
-
-You must start them **separately**, each with its own command.
-
-### 🔹 Frontend
+### Frontend
 
 ```bash
-cd front
-deno task dev
+cd front        # or project root if no API
+deno task dev   # development — watch mode + .dev.env
 ```
-
-> Runs the front app in **development mode**, using development environment variables.
-
-To build it for production:
 
 ```bash
-deno task build
+deno task build # production — .env
 ```
 
-> Builds and serves the front app in **production mode**, using production environment variables.
+The generated frontend includes:
 
-### 🔹 Backend
+- A **Slick server** with SSR and client hydration
+- A sample **home page** with a Preact **Counter island**
+- A base **app template** with reset and layout styles
+- If the database option is enabled: an `onrequest` hook that fetches the logged-in user from the API via a Bearer token
+  cookie
+
+### Backend
 
 ```bash
 cd back
-deno task dev
+deno task dev   # development — watch mode + .dev.env
 ```
-
-> Runs the back app in **development mode**, using development environment variables.
-
-To build it for production:
 
 ```bash
-deno task build
+deno task build # production — .env
 ```
 
-> Builds and serves the back app in **production mode**, using production environment variables.
+The generated backend includes:
 
-## ⚙️ Environment Configuration
+- An **ExpressAPI** server with CORS restricted to `APP_URL`
+- **Auto-discovery** of all routers exported from `src/routes/`
+- A `GET /` route returning a JSON hello-world response
+- If the database option is enabled:
+  - A **User** model (`id`, `username`, `email`, `password`, `resetId`)
+  - A **JsonToken** service for JWT authentication
+  - A **user middleware** that validates tokens and attaches the user to the request
+  - A `GET /user` route returning the authenticated user (password stripped)
+- If the mailer option is enabled: a **Mailer** service wrapping Nodemailer
 
-If you activate the **database** option during project creation, go to the `/back` directory and configure your
-environment files with the following variables:
+## ⚙️ Environment configuration
+
+Two env files are generated per application:
+
+- **`.dev.env`** — local development (localhost URLs, watch mode)
+- **`.env`** — production (URLs provided during setup)
+
+### Frontend variables
+
+| Variable   | Description                            |
+| ---------- | -------------------------------------- |
+| `APP_PORT` | Server port                            |
+| `APP_URL`  | Public frontend URL                    |
+| `API_URL`  | Backend URL _(only if API is enabled)_ |
+
+### Backend variables
+
+| Variable     | Description                           |
+| ------------ | ------------------------------------- |
+| `API_SECRET` | JWT signing secret _(auto-generated)_ |
+| `API_PORT`   | Server port                           |
+| `API_URL`    | Public API URL                        |
+| `APP_URL`    | Frontend URL (used for CORS)          |
+
+If the **database** option is enabled, fill in the following in `/back`:
 
 ```
 DATABASE_HOST=
@@ -89,7 +180,7 @@ DATABASE_PASS=
 DATABASE_NAME=
 ```
 
-If you enable the **mailer** service, also configure:
+If the **mailer** option is enabled, also configure:
 
 ```
 MAILER_HOST=
@@ -99,13 +190,17 @@ MAILER_PASS=
 MAILER_NAME=
 ```
 
-When the database option is enabled, the generated code automatically includes:
+## 🛠 Tech stack
 
-- A minimal **user model**
-- An **authentication middleware**
-- An **endpoint** to fetch user data
-
-This provides a ready-to-use foundation for managing user accounts securely.
+| Layer           | Package                                  | Role                            |
+| --------------- | ---------------------------------------- | ------------------------------- |
+| CLI             | `@webtools/init`                         | Project scaffolding             |
+| Frontend server | `@webtools/slick-server`                 | SSR, pages, templates           |
+| Frontend client | `@webtools/slick-client`                 | Hydration, cookies              |
+| UI              | `preact` + `@preact/signals`             | Components and reactive islands |
+| Backend         | `@webtools/expressapi`                   | HTTP server, router, JsonToken  |
+| ORM             | `@sequelize/core` + `@sequelize/mariadb` | Database _(optional)_           |
+| Email           | `nodemailer`                             | Mailer _(optional)_             |
 
 ## 🪪 License
 

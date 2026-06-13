@@ -1,27 +1,29 @@
 import type { Project } from "../../interfaces/project.ts";
 import * as path from "@std/path";
 
-export function deno(backPath: string, project: Project) {
+export function deno(backPath: string, project: Project, monorepo = false) {
 	const config = {
-		lock: false,
+		...(!monorepo && {
+			lock: false,
+			fmt: {
+				indentWidth: 4,
+				lineWidth: 120,
+				useTabs: true,
+			},
+		}),
+
 		tasks: {
-			build: "deno run --allow-all --env-file=.env ./src/index.ts",
-			dev: "deno run --watch --allow-all --env-file=.dev.env ./src/index.ts",
+			build: "deno run -A --env-file=.env ./src/index.ts",
+			dev: "deno run -A --watch --env-file=.dev.env ./src/index.ts",
 		},
 
 		imports: {
 			"#/": "./src/",
 
-			"@webtools/expressapi": "jsr:@webtools/expressapi@^0.6.7",
+			"@webtools/expressapi": "jsr:@webtools/expressapi@^0.8.1",
 			"@std/path": "jsr:@std/path@^1.0.8",
 			"@std/fs": "jsr:@std/fs@^1.0.14",
 		} as Record<string, string>,
-
-		fmt: {
-			indentWidth: 4,
-			lineWidth: 120,
-			useTabs: true,
-		},
 
 		compilerOptions: {
 			experimentalDecorators: true,
@@ -40,7 +42,7 @@ export function deno(backPath: string, project: Project) {
 	}
 
 	Deno.writeTextFileSync(
-		path.join(backPath, "deno.jsonc"),
-		JSON.stringify(config, null, 4),
+		path.join(backPath, "deno.json"),
+		JSON.stringify(config, null, "\t"),
 	);
 }

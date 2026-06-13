@@ -30,7 +30,7 @@ export function _static(srcPath: string, project: Project) {
 
 	Deno.writeTextFileSync(
 		path.join(stylesPath, "app.css"),
-		`#root {
+		`#app {
 	width: 100%;
 	min-height: 100vh;
 
@@ -49,6 +49,19 @@ export function _static(srcPath: string, project: Project) {
 		`h1 {
 	font-size: 18px;
 	font-weight: 500;
+}
+
+section {
+	margin-top: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+h2 {
+	font-size: 14px;
+	font-weight: 500;
+	color: #666;
 }`,
 	);
 

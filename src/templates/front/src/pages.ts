@@ -7,34 +7,37 @@ export function pages(srcPath: string, project: Project) {
 	utils.ensureDir(pagesPath);
 
 	const f = project.api?.database ? `(req) => ` : "";
-	const p = project.api?.database
-		? `\n			{req.data.user && <p>Logged in as {req.data.user.username}</p>}`
-		: "";
+	const p = project.api?.database ? `\n\t\t\t{req.data.user && <p>Logged in as {req.data.user.username}</p>}` : "";
 
 	Deno.writeTextFileSync(
 		path.join(pagesPath, "index.tsx"),
-		`import * as Slick from "@webtools/slick-server";
+		`import type { Page } from "@webtools/slick-server";
+import Counter from "../islands/Counter.tsx";
 
 export default {
-	url: "/",
-	template: "app",
+\turl: "/",
+\ttemplate: "app",
 
-	title: "Webtools App",
+\ttitle: "Webtools App",
 
-	styles: [
-		"/styles/app/index.css",
-	],
-	scripts: [],
+\tstyles: [
+\t\t"/styles/app/index.css",
+\t],
+\tscripts: [],
 
-	head: null,
-	body: ${f}(
-		<>
-			<h1>Welcome to your Webtools App</h1>${p}
-		</>
-	),
+\thead: null,
+\tbody: ${f}(
+\t\t<>
+\t\t\t<h1>Welcome to your Webtools App</h1>${p}
+\t\t\t<section>
+\t\t\t\t<h2>Interactive island</h2>
+\t\t\t\t<Counter start={0} label="Clicks" />
+\t\t\t</section>
+\t\t</>
+\t),
 
-	onpost: null,
-	onrequest: null,
-} satisfies Slick.Page;`,
+\tonpost: null,
+\tonrequest: null,
+} satisfies Page;`,
 	);
 }

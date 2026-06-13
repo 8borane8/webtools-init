@@ -8,44 +8,44 @@ export function templates(srcPath: string, project: Project) {
 
 	const onrequest = project.api?.database
 		? `async (req) => {
-        req.data.user = null;
-        if (!req.cookies.token) return;
+\t\treq.data.user = null;
+\t\tif (!req.cookies.token) return;
 
-        const response = await fetch(\`\${Deno.env.get("API_URL")}/user\`, {
-            headers: {
-                "Authorization": \`Bearer \${req.cookies.token}\`,
-            },
-        });
+\t\tconst response = await fetch(\`\${Deno.env.get("API_URL")}/user\`, {
+\t\t\theaders: {
+\t\t\t\t"Authorization": \`Bearer \${req.cookies.token}\`,
+\t\t\t},
+\t\t});
 
-        const jsonResponse = await response.json();
-        if (jsonResponse.success) req.data.user = jsonResponse.data;
-    }`
+\t\tconst jsonResponse = await response.json();
+\t\tif (jsonResponse.success) req.data.user = jsonResponse.data;
+\t}`
 		: "null";
 
 	Deno.writeTextFileSync(
 		path.join(templatesPath, "app.tsx"),
-		`import * as Slick from "@webtools/slick-server";
+		`import type { Template } from "@webtools/slick-server";
 
 export default {
-	name: "app",
-	favicon: "/favicon.ico",
+\tname: "app",
+\tfavicon: "/favicon.ico",
 
-	styles: [
-		"/styles/reset.css",
-		"/styles/app.css",
-	],
-	scripts: [
-		"/scripts/app.ts",
-	],
+\tstyles: [
+\t\t"/styles/reset.css",
+\t\t"/styles/app.css",
+\t],
+\tscripts: [
+\t\t"/scripts/app.ts",
+\t],
 
-	head: null,
-	body: (
-		<>
-			<div id="app"></div>
-		</>
-	),
+\thead: null,
+\tbody: (
+\t\t<>
+\t\t\t<main id="app"></main>
+\t\t</>
+\t),
 
-	onrequest: ${onrequest},
-} satisfies Slick.Template;`,
+\tonrequest: ${onrequest},
+} satisfies Template;`,
 	);
 }
