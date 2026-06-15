@@ -1,3 +1,4 @@
+import { sharedImports } from "../shared.ts";
 import * as path from "@std/path";
 
 export function deno(frontPath: string, monorepo = false) {
@@ -17,15 +18,10 @@ export function deno(frontPath: string, monorepo = false) {
 		},
 
 		imports: {
-			"@webtools/slick-server": "jsr:@webtools/slick-server@^0.6.0",
-			"@webtools/slick-client": "jsr:@webtools/slick-client@^0.3.0",
-			"@webtools/expressapi": "jsr:@webtools/expressapi@^0.8.1",
+			...(!monorepo && sharedImports),
 
-			"preact": "npm:preact@^10.29.2",
-			"preact/hooks": "npm:preact@^10.29.2/hooks",
-			"preact/jsx-runtime": "npm:preact@^10.29.2/jsx-runtime",
-			"preact-root-fragment": "npm:preact-root-fragment@^0.3.1",
-			"@preact/signals": "npm:@preact/signals@^2.9.1",
+			"@webtools/slick-server": "jsr:@webtools/slick-server@^0.6.16",
+			"@webtools/expressapi": "jsr:@webtools/expressapi@^0.8.1",
 		},
 
 		compilerOptions: {

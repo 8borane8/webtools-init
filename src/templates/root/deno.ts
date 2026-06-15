@@ -1,9 +1,12 @@
+import { sharedImports } from "../shared.ts";
 import * as path from "@std/path";
 
 export function deno(projectPath: string) {
 	const config = {
 		lock: false,
 		workspace: ["./front", "./back"],
+
+		imports: sharedImports,
 
 		fmt: {
 			indentWidth: 4,
